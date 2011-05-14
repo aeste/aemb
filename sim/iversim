@@ -6,20 +6,18 @@ RANDOM=$(date +%s)
 SIM="isim"
 IVERLIB="-y$HERE/../rtl/verilog"
 
-# seed random number
-echo "\`define randseed $RANDOM" > random.v
-
 # pre-processor
-iverilog $IVERLIB -tnull -M$SIM.ls $@ && \
+iverilog $IVERLIB -tnull -M$SIM.tls $@ && \
+uniq $SIM.tls > $SIM.ls && \
 sed 1d < $SIM.ls > $SIM.fs && \
 iverilog -c$SIM.fs -E -tnull -o $SIM.v $@ && \
-rm $SIM.ls $SIM.fs && \
-rm random.v && \
+rm $SIM.ls $SIM.fs $SIM.tls && \
 
 # simulation
 if [ -e "$SIM.v" ]; then
-	iverilog -tvvp -o $SIM.vvp $SIM.v && \
-	vvp -l iverilog.log $SIM.vvp && \
+	iverilog -Wall -o ./$SIM.vvp $SIM.v && \
+#	vvp -l iverilog.log $SIM.vvp && \
+	./$SIM.vvp +randseed=$RANDOM && \
 	rm $SIM.vvp
 fi
 

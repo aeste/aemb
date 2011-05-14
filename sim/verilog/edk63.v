@@ -20,12 +20,10 @@
 
 /**
  Simulation Test Bench
- @file edk62.v
+ @file edk63.v
  
 */
 
-`include "random.v"
-  
 module edk63();
    localparam AEMB_DWB = 18;
    localparam AEMB_XWB = 5;   
@@ -51,17 +49,24 @@ module edk63();
    // End of automatics
 
    always #5 sys_clk_i <= !sys_clk_i;
+
+   integer randseed; ///< Random seed
+   reg[31:0] timer0; ///< Fake timer
    
    initial begin
-      `ifdef VCD_DUMP
+      // Initialise Random to command-line parameter.
+      if (!$value$plusargs("randseed=%d",  randseed)) randseed=42;
+      timer0 = $random(randseed);
+      
+`ifdef DUMP_VCD
       $dumpfile ("dump.vcd");
       $dumpvars (1,uut);           
-      `endif
+`endif
       
-      sys_clk_i = $random(`randseed);
+      sys_clk_i = $random;
       sys_rst_i = 1;
       sys_ena_i = 1;
-      sys_int_i = 1;
+      sys_int_i = 0;
       
       xwb_ack_i = 0;      
       
@@ -116,12 +121,18 @@ module edk63();
 	xwb_ack_i <= 1'h0;
 	// End of automatics
      end else begin
-	iwb_ack_i <= #1 iwb_stb_o & !iwb_ack_i;      
-	dwb_ack_i <= #1 dwb_stb_o & !dwb_ack_i;
-	xwb_ack_i <= #1 xwb_stb_o & !xwb_ack_i;
+	// Include a certain random element in acks.
+	iwb_ack_i <= #1 iwb_stb_o & !iwb_ack_i & $random;      
+	dwb_ack_i <= #1 dwb_stb_o & !dwb_ack_i & $random;
+	xwb_ack_i <= #1 xwb_stb_o & !xwb_ack_i & $random;
      end // else: !if(sys_rst_i)
    
    always @(posedge sys_clk_i) begin
+
+      // FAUX timer implementation - triggers every 32k counts (e.g. 1s on RTC)
+      timer0 <= timer0 + 1;
+      if (timer0 % 32768 == 0) sys_int_i <= 1'b1;
+      
       iadr <= #1 iwb_adr_o;      
       dadr <= #1 dwb_adr_o;
 
