@@ -158,7 +158,7 @@ module edk63();
 	   4'hC: ram[dwb_adr_o] <= {dwb_dat_o[31:16], dwb_dat_t[15:0]};
 	   4'hF: ram[dwb_adr_o] <= {dwb_dat_o};
 	   default: begin
-	      //$displayh("\n*** INVALID WRITE ",{dwb_adr_o,2'o0}, " ***");
+	      $displayh("*** ERROR WRITE @",{dwb_adr_o,2'o0}, " ***");
 	      //$finish;	      
 	   end	   
 	 endcase // case (dwb_sel_o)
@@ -172,8 +172,8 @@ module edk63();
 		default: dwb_dat_i <= ram[dwb_adr_o];		
 	      endcase // case ({dwb_adr_o,2'o0})	      
 	   end
-	   default: begin
-	      //$displayh("\n*** INVALID READ ",{dwb_adr_o,2'd0}, " ***");	      
+	   default: if (dwb_ack_i) begin
+	      $displayh("*** ERROR READ  @",{dwb_adr_o,2'd0}, " ***");	      
 	      //$finish;	      
 	   end	   
 	 endcase // case (dwb_sel_o)	 
