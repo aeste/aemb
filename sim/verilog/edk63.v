@@ -121,9 +121,10 @@ module edk63();
 	xwb_ack_i <= 1'h0;
 	// End of automatics
      end else begin
-	iwb_ack_i <= #1 iwb_stb_o & !iwb_ack_i;      
-	dwb_ack_i <= #1 dwb_stb_o & !dwb_ack_i;
-	xwb_ack_i <= #1 xwb_stb_o & !xwb_ack_i;
+	// Include a certain random element in acks.
+	iwb_ack_i <= #1 iwb_stb_o & !iwb_ack_i & $random;      
+	dwb_ack_i <= #1 dwb_stb_o & !dwb_ack_i & $random;
+	xwb_ack_i <= #1 xwb_stb_o & !xwb_ack_i & $random;
      end // else: !if(sys_rst_i)
    
    always @(posedge sys_clk_i) begin
