@@ -71,7 +71,7 @@ module edk63();
       xwb_ack_i = 0;      
       
       #50 sys_rst_i = 0;      
-      #4000000 $displayh("\n*** TIMEOUT ", $stime, " ***"); $finish;
+      #5000000 $displayh("\n*** TIMEOUT ", $stime, " ***"); $finish;
       
    end // initial begin
    
@@ -106,10 +106,11 @@ module edk63();
    reg [31:0] 		dwblat;
    reg [31:0] 		xwblat;   
    reg [31:2] 		dadr, iadr;
+   reg [31:0] dwb_dat_i; 
    
    wire [31:0] 		dwb_dat_t = ram[dwb_adr_o];   
    wire [31:0] 		iwb_dat_i = rom[iadr]; 
-   wire [31:0] 		dwb_dat_i = ram[dadr];     
+   //wire [31:0]          dwb_dat_i = (dwb_adr_o == -16) ? timer0 : ram[dadr];     
    wire [31:0] 		xwb_dat_i = xwblat;   
    
    always @(posedge sys_clk_i) 
@@ -163,9 +164,13 @@ module edk63();
 	 endcase // case (dwb_sel_o)
       end // if (dwb_wre_o & dwb_stb_o & dwb_ack_i)
 
-      if (dwb_stb_o & !dwb_wre_o & dwb_ack_i) begin
+      if (dwb_stb_o & !dwb_wre_o) begin
 	 case (dwb_sel_o)
 	   4'h1,4'h2,4'h4,4'h8,4'h3,4'hC,4'hF: begin
+	      case ({dwb_adr_o,2'o0})
+		32'hFFFFFFF0: dwb_dat_i <= timer0;
+		default: dwb_dat_i <= ram[dwb_adr_o];		
+	      endcase // case ({dwb_adr_o,2'o0})	      
 	   end
 	   default: begin
 	      //$displayh("\n*** INVALID READ ",{dwb_adr_o,2'd0}, " ***");	      

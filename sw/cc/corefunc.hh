@@ -81,8 +81,9 @@ volatile int intr = 0;
 void __attribute__ ((interrupt_handler)) interruptHandler() 
 {
   int *toggle = (int *)0xFFFFFFE0;
-  intr++; // flag the interrupt service routine
-  *toggle = -1; // disable interrupts
+  //intr++; // flag the interrupt service routine
+  intr = getTimer0();
+  *toggle = -1; // acknowledge timer interrupt
 }
 
 /**

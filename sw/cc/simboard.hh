@@ -47,6 +47,12 @@ char inbyte()
   return 0;
 }
 
+inline int getTimer0()
+{
+  int *TMR0 = (int *) 0xFFFFFFF0;
+  return *TMR0;
+}
+
 #ifdef __cplusplus
 }
 #endif
