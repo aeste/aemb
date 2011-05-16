@@ -53,6 +53,12 @@ inline int getTimer0()
   return *TMR0;
 }
 
+inline int setTimer0(int timer)
+{
+  volatile int *TMR0 = (int *) 0xFFFFFFF0;
+  *TMR0 = timer;
+}
+
 #ifdef __cplusplus
 }
 #endif

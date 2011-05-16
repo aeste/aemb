@@ -2,7 +2,8 @@
 # Copyright (C) 2008-2011 Aeste Works (M) Sdn Bhd.
 
 HERE=$(dirname $0)
-SIM="/tmp/isim"
+SIM=$(tempfile)
+DUMP=$(hostname)
 IVERLIB="-y$HERE/../rtl/verilog"
 RANDOM=$$
 
@@ -10,12 +11,15 @@ RANDOM=$$
 iverilog $IVERLIB -tnull -M$SIM.ls $@ && \
 uniq $SIM.ls | sed 1d > $SIM.fs && \
 iverilog -c$SIM.fs -E -tnull -o $SIM.v $@ && \
+#rm $SIM $SIM.fs $SIM.ls && \
+echo $?
 
 # simulation
 if [ -e "$SIM.v" ]; then
 	iverilog -Wall -o $SIM.vvp $SIM.v && \
-	$SIM.vvp +randseed=$RANDOM && \
-	rm $SIM.vvp
+	$SIM.vvp +randseed=$RANDOM +dumpfile=$DUMP && \
+	echo $?
+#	rm $SIM.vvp $SIM.v
 fi
 
 # recompress
