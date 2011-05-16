@@ -130,10 +130,6 @@ module edk63();
    
    always @(posedge sys_clk_i) begin
 
-      // FAUX timer implementation - triggers every 32k counts (e.g. 1s on RTC)
-      timer0 <= timer0 + 1;
-      if (timer0 % 32768 == 0) sys_int_i <= 1'b1;
-      
       iadr <= #1 iwb_adr_o;      
       dadr <= #1 dwb_adr_o;
 
@@ -144,9 +140,10 @@ module edk63();
       // SPECIAL PORTS
       if (dwb_wre_o & dwb_stb_o & dwb_ack_i) begin
 	 case ({dwb_adr_o,2'o0})
-	   32'hFFFFFFD0: $displayh(dwb_dat_o);
-	   32'hFFFFFFC0: $write("%c",dwb_dat_o[31:24]);
-	   32'hFFFFFFE0: sys_int_i <= #1 !sys_int_i;	   
+	   32'hFFFFFFD0: $displayh(dwb_dat_o); // display data
+	   32'hFFFFFFC0: $write("%c",dwb_dat_o[31:24]); // stdout output
+	   32'hFFFFFFE0: sys_int_i <= #1 !sys_int_i; // acknowledge interrupt.
+	   32'hFFFFFFF0: timer0 <= dwb_dat_o; // write to Timer0	   
 	 endcase // case ({dwb_adr_o,2'o0})
 	 
 	 case (dwb_sel_o)
@@ -163,7 +160,13 @@ module edk63();
 	   end	   
 	 endcase // case (dwb_sel_o)
       end // if (dwb_wre_o & dwb_stb_o & dwb_ack_i)
+      else begin
+	 // FAUX timer implementation - triggers every 32k counts (e.g. 1s on RTC)
+	 timer0 <= timer0 + 1;
+	 if (timer0 % 32768 == 0) sys_int_i <= 1'b1;     
 
+      end
+      
       if (dwb_stb_o & !dwb_wre_o) begin
 	 case (dwb_sel_o)
 	   4'h1,4'h2,4'h4,4'h8,4'h3,4'hC,4'hF: begin
