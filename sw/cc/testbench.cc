@@ -88,9 +88,10 @@ void coretests()
 int main() 
 {
   iprintf("AEMB2 32-bit Microprocessor Core Tests\n");
+  iprintf("Timer0\t: %d\n",getTimer0());
   
-  numtests();
   coretests();
+  numtests();
 
   return EXIT_SUCCESS;
 }
