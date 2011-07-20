@@ -35,7 +35,7 @@ typedef void (boot_addr)(void);
 int main (int argc, char* argv[])
 {
   // Welcome banner
-  puts("ALAM Micro Execution Environment.");
+  puts("Micro Execution Environment.");
   puts("Copyright (C) 2011 Aeste Works (M) S/B.\n");
 
   puts("This program comes with ABSOLUTELY NO WARRANTY;");
