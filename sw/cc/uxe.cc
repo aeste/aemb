@@ -24,7 +24,7 @@
 
 */
 
-#define KERNEL_BASE 0x20000 ///< Base address of the kernel
+#define KERNEL_BASE 0x00020000 ///< Base address of the kernel
 
 #include <cstdlib>
 #include <cstdio>
@@ -43,8 +43,13 @@ int main ()
 
   // Load kernel image (SD/MMC)
 
+  // Print kernel base address (only works with 0-9)
+  for (unsigned int i = 0, a = KERNEL_BASE; i < 8; ++i, a = a << 4) {
+      putchar( (a >> 28) + 0x30 );
+  }
+  putchar('\n');
+
   // Jump to kernel execution
-  puts("Booting...");
   ((boot_addr*) KERNEL_BASE)();
 
   // This should *NEVER* execute.
