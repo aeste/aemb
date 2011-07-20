@@ -32,7 +32,7 @@
 
 typedef void (boot_addr)(void);
 
-int main (int argc, char* argv[])
+int main ()
 {
   // Welcome banner
   puts("Micro Execution Environment.");
