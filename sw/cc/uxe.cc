@@ -1,6 +1,6 @@
 /* 
 ** AEMB Micro Execution Environment
-** Copyright (C) 2011 Shawn Tan <shawn.tan@aeste.net>
+** Copyright (C) 2011 Aeste Works (M) S/B.
 **
 ** This file is part of AEMB.
 **
@@ -24,10 +24,32 @@
 
 */
 
+#define KERNEL_BASE 0x20000 ///< Base address of the kernel
+
 #include <cstdlib>
 #include <cstdio>
 #include "aemb/core.hh"
 
+typedef void (boot_addr)(void);
+
+int main (int argc, char* argv[])
+{
+  // Welcome banner
+  puts("ALAM Micro Execution Environment.");
+  puts("Copyright (C) 2011 Aeste Works (M) S/B.\n");
+
+  puts("This program comes with ABSOLUTELY NO WARRANTY;");
+  puts("This is free software, and you are welcome to redistribute it under certain conditions;");
+  puts("For more details, see the GPL3.txt file included.");
+
+  // Enable STDIN/OUT
+
+  // Jump to kernel execution
+  puts("\nBooting...");
+  ((boot_addr*) KERNEL_BASE)();
+
+  return EXIT_FAILURE; // This should *NEVER* execute.
+}
 
 void outbyte(char c) 
 {
@@ -40,9 +62,3 @@ char inbyte()
   return 0;
 }
 
-int main (int argc, char* argv[])
-{
-  puts("AEMB Micro Execution Environment.");
-
-  return EXIT_FAILURE; // This should *NEVER* execute.
-}
