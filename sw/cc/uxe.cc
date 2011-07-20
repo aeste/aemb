@@ -36,19 +36,19 @@ int main ()
 {
   // Welcome banner
   puts("Micro Execution Environment.");
-  puts("Copyright (C) 2011 Aeste Works (M) S/B.\n");
+  puts("Copyright (C) 2011 Aeste Works (M) S/B.");
+  //puts("\nThis program comes with ABSOLUTELY NO WARRANTY;\nThis is free software, and you are welcome to redistribute it under certain conditions;\nFor more details, see the GPL3.txt file included.\n");
 
-  puts("This program comes with ABSOLUTELY NO WARRANTY;");
-  puts("This is free software, and you are welcome to redistribute it under certain conditions;");
-  puts("For more details, see the GPL3.txt file included.");
+  // Enable stdin/out
 
-  // Enable STDIN/OUT
+  // Load kernel image (SD/MMC)
 
   // Jump to kernel execution
-  puts("\nBooting...");
+  puts("Booting...");
   ((boot_addr*) KERNEL_BASE)();
 
-  return EXIT_FAILURE; // This should *NEVER* execute.
+  // This should *NEVER* execute.
+  return EXIT_FAILURE;
 }
 
 void outbyte(char c) 
