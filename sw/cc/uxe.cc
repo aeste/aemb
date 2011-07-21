@@ -57,7 +57,7 @@ int main ()
   // Welcome banner
   uxe_puts("Micro Execution Environment 11.07");
   uxe_puts("Copyright (C) 2011 Aeste Works (M) S/B.");
-  uxe_puts("\nThis program comes with ABSOLUTELY NO WARRANTY;\nThis is free software, and you are welcome to redistribute it under certain conditions;\nFor more details, see the GPL3.txt file included.\n");
+  //uxe_puts("\nThis program comes with ABSOLUTELY NO WARRANTY;\nThis is free software, and you are welcome to redistribute it under certain conditions;\nFor more details, see the GPL3.txt file included.\n");
 
   // Enable stdin/out
 
