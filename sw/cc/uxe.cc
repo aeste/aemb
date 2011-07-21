@@ -26,24 +26,45 @@
 
 #define KERNEL_BASE 0x00020000 ///< Base address of the kernel
 
-#include <cstdlib>
-#include <cstdio>
 #include "aemb/core.hh"
 
 typedef void (boot_addr)(void);
 
+// Replacements for STDIO
+
+void putchar(char c)
+{
+  volatile char *COUT = (char *) 0xFFFFFFC0;
+  *COUT = c;
+}
+
+void fputs(char * msg)
+{
+  for (char *c = msg; *c != 0; c++) putchar(*c);
+}
+
+void puts(char * msg)
+{
+  fputs(msg);
+  putchar('\n');
+}
+
+
+// Main execution environment.
+
 int main ()
 {
   // Welcome banner
-  puts("Micro Execution Environment.");
+  puts("Micro Execution Environment 11.07");
   puts("Copyright (C) 2011 Aeste Works (M) S/B.");
-  //puts("\nThis program comes with ABSOLUTELY NO WARRANTY;\nThis is free software, and you are welcome to redistribute it under certain conditions;\nFor more details, see the GPL3.txt file included.\n");
+  puts("\nThis program comes with ABSOLUTELY NO WARRANTY;\nThis is free software, and you are welcome to redistribute it under certain conditions;\nFor more details, see the GPL3.txt file included.\n");
 
   // Enable stdin/out
 
   // Load kernel image (SD/MMC)
 
   // Print kernel base address (only works with 0-9)
+  fputs("Booting 0x");
   for (unsigned int i = 0, a = KERNEL_BASE; i < 8; ++i, a = a << 4) {
       putchar( (a >> 28) + 0x30 );
   }
@@ -53,17 +74,5 @@ int main ()
   ((boot_addr*) KERNEL_BASE)();
 
   // This should *NEVER* execute.
-  return EXIT_FAILURE;
+  return -1;
 }
-
-void outbyte(char c) 
-{
-  volatile char *COUT = (char *) 0xFFFFFFC0;
-  *COUT = c;
-}
-
-char inbyte() 
-{
-  return 0;
-}
-
