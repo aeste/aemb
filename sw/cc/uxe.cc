@@ -32,21 +32,21 @@ typedef void (boot_addr)(void);
 
 // Replacements for STDIO
 
-void putchar(char c)
+void uxe_putc(char c)
 {
   volatile char *COUT = (char *) 0xFFFFFFC0;
   *COUT = c;
 }
 
-void fputs(char * msg)
+void uxe_putw(char * msg)
 {
-  for (char *c = msg; *c != 0; c++) putchar(*c);
+  for (char *c = msg; *c != 0; c++) uxe_putc(*c);
 }
 
-void puts(char * msg)
+void uxe_puts(char * msg)
 {
-  fputs(msg);
-  putchar('\n');
+  uxe_putw(msg);
+  uxe_putc('\n');
 }
 
 
@@ -55,20 +55,20 @@ void puts(char * msg)
 int main ()
 {
   // Welcome banner
-  puts("Micro Execution Environment 11.07");
-  puts("Copyright (C) 2011 Aeste Works (M) S/B.");
-  puts("\nThis program comes with ABSOLUTELY NO WARRANTY;\nThis is free software, and you are welcome to redistribute it under certain conditions;\nFor more details, see the GPL3.txt file included.\n");
+  uxe_puts("Micro Execution Environment 11.07");
+  uxe_puts("Copyright (C) 2011 Aeste Works (M) S/B.");
+  uxe_puts("\nThis program comes with ABSOLUTELY NO WARRANTY;\nThis is free software, and you are welcome to redistribute it under certain conditions;\nFor more details, see the GPL3.txt file included.\n");
 
   // Enable stdin/out
 
   // Load kernel image (SD/MMC)
 
   // Print kernel base address (only works with 0-9)
-  fputs("Booting 0x");
+  uxe_putw("Booting 0x");
   for (unsigned int i = 0, a = KERNEL_BASE; i < 8; ++i, a = a << 4) {
-      putchar( (a >> 28) + 0x30 );
+      uxe_putc( (a >> 28) + 0x30 );
   }
-  putchar('\n');
+  uxe_putc('\n');
 
   // Jump to kernel execution
   ((boot_addr*) KERNEL_BASE)();
