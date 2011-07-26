@@ -4,7 +4,7 @@
 
 CC = mb-g++
 LFLAGS = -Wl,-defsym -Wl,_STACK_SIZE=0x2000 -Wl,-defsym -Wl,_HEAP_SIZE=0x2000
-CFLAGS = -mtune=v5.00 -mxl-soft-div -msoft-float -mxl-barrel-shift -mno-xl-soft-mul
+CFLAGS = -mtune=v5.00 -mxl-soft-div -msoft-float -mxl-barrel-shift -mno-xl-soft-mul -g
 IFLAGS = -I cc/
 OFLAGS = -Os
 
