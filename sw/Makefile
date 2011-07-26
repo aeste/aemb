@@ -12,10 +12,10 @@ OBJDUMP = mb-objdump
 OBJCOPY = mb-objcopy
 
 testbench: testbench.cc sim
-	echo "DONE"
+	@echo "DONE"
 
 uxe: uxe.cc sim
-	echo "DONE"
+	@echo "DONE"
 
 testbench.cc: cc/testbench.cc
 	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) $(OFLAGS) -specs=aemb.specs -o rom.elf cc/testbench.cc
