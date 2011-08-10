@@ -44,7 +44,7 @@ extern "C" {
   inline int aembIsThread1() 
   {
     int rmsr = aembGetMSR();
-    return ((rmsr & AEMB_MSR_HTX) && (rmsr & AEMB_MSR_PHA));
+    return ((rmsr & AEMB_MSR_PHA));
   }
   
   /**
@@ -55,7 +55,7 @@ extern "C" {
   inline int aembIsThread0()
   {
     int rmsr = aembGetMSR();
-    return ((rmsr & AEMB_MSR_HTX) && (!(rmsr & AEMB_MSR_PHA)));
+    return (!(rmsr & AEMB_MSR_PHA));
   }
   
   /**
@@ -99,35 +99,3 @@ extern "C" {
 #endif
 
 #endif
-
-/*
-  $Log: not supported by cvs2svn $
-  Revision 1.9  2008/04/27 16:33:42  sybreon
-  License change to GPL3.
-
-  Revision 1.8  2008/04/26 19:31:35  sybreon
-  Made headers C compatible.
-
-  Revision 1.7  2008/04/26 18:05:22  sybreon
-  Minor cosmetic changes.
-
-  Revision 1.6  2008/04/23 14:19:39  sybreon
-  Fixed minor bugs.
-  Initial use of hardware mutex.
-
-  Revision 1.5  2008/04/20 16:35:53  sybreon
-  Added C/C++ compatible #ifdef statements
-
-  Revision 1.4  2008/04/12 14:07:26  sybreon
-  added a rendezvous function
-
-  Revision 1.3  2008/04/11 15:53:24  sybreon
-  changed MSR bits
-
-  Revision 1.2  2008/04/11 11:34:30  sybreon
-  changed semaphore case
-
-  Revision 1.1  2008/04/09 19:48:37  sybreon
-  Added new C++ files
-
-*/
