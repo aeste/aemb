@@ -89,6 +89,7 @@ INTERRUPT TEST ROUTINE
 
 int interruptTest(int timeout)
 {
+  setTimer0(0); // reset TMR0
   aembEnableInterrupts(); 
   for (int timer=0; (timer < timeout * 100); ++timer)
     asm volatile ("nop"); // delay loop

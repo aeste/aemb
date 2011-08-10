@@ -38,15 +38,16 @@ AEMB. It can be compiled by the GCC compiler.
 void checkcode(int code)
 {
   if (code == EXIT_SUCCESS)
-    iprintf("\t\t-PASS-\n");
+    puts("\t[PASS]");
   else
-    iprintf("\t\t*FAIL*\n");
+    puts("\t[FAIL]");
 }
 
 void printtest(char *msg)
 {
   static int count = 1;
-  iprintf("\t%d. %s\n",count++, msg);
+  //iprintf("\t%d. %s\n",count++, msg);
+  fputs(msg, stdout);
 }
 
 void numtests()
@@ -60,7 +61,7 @@ void numtests()
   checkcode(euclideanTest(MAX_TEST));
 
   // *** 3. NEWTON-RHAPSON ***
-  printtest("Floating Point Arithmetic");
+  printtest("Floating Point");
   checkcode(newtonTest(MAX_TEST));
 
 }
@@ -87,7 +88,8 @@ void coretests()
 // run tests
 int main() 
 {
-  iprintf("AEMB2 32-bit Microprocessor Core Tests\n");
+  puts("AEMB2 32-bit Microprocessor Core Tests");
+  //iprintf("Timer0\t: %d\n",getTimer0());
   
   numtests();
   coretests();
