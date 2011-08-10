@@ -105,8 +105,7 @@ module aeMB2_pipe (/*AUTOARG*/
 	brk_if <= 2'h0;
 	// End of automatics
      end else if (dena) begin	
-	// TODO: consider MSR[9:8]
-	brk_if[1] <= #1 exc_lat; // HIGH PRIORITY - exception
+	brk_if[1] <= #1 exc_lat & msr_ex[8] & !msr_ex[9]; // HIGH PRIORITY - exception
 	brk_if[0] <= #1 !exc_lat & !msr_ex[9] & !msr_ex[3] & int_lat; // LOW PRIORITY - interrupt (not BIP/EIP)
      end
    
