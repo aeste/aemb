@@ -385,7 +385,7 @@ module aeMB2_intu (/*AUTOARG*/
      end else if (dena) begin
 	rEAR <= #1 (exc_dwb[1]) ? {mem_ex, 2'o0} : rEAR_C; // LXX/SXX
 	
-	rESR <= #1 (exc_ill | exc_dwb[1]) ? 
+	rESR <= #1 ((exc_ill | exc_dwb[1]) & rMSR_EE) ? 
 		{exc_ill, exc_dwb[1]} : rESR_C; // ESR	
 	
 	rMSR_C <= #1

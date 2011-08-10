@@ -59,20 +59,17 @@ volatile void _hw_exception_handler()
 		"nop\n");
 }
   
-  /**
+/**
 EXCEPTION TEST ROUTINE
 */
 
 int exceptionTest(int timeout)
 {
   volatile int *toggle = (int *)0xFFFFFFE2;  
-
-  // enable exceptions
+  aembEnableException();
   asm volatile (".long 0xDEADC0DE"); // define illegal instruction (1 error)
-
   *toggle = *toggle; // test unaligned memory access (2 errors)
-  // disable exceptions
-
+  aembDisableException();
   return (exce != -1) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 

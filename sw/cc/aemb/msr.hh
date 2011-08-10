@@ -35,6 +35,8 @@
 #define AEMB_MSR_IE   (1 << 1) ///< Interrupt Enable
 #define AEMB_MSR_C    (1 << 2) ///< Arithmetic Carry
 #define AEMB_MSR_BIP  (1 << 3) ///< Break in Progress
+#define AEMB_MSR_EE  (1 << 8) ///< Exception Enable
+#define AEMB_MSR_EIP  (1 << 9) ///< Exception in Progress
     
 #define AEMB_MSR_ITE  (1 << 5) ///< Instruction Cache Enable
 #define AEMB_MSR_DZ   (1 << 6) ///< Division by Zero
@@ -114,6 +116,22 @@ extern "C" {
     return msr;
   }
 
+  /** Enable global exception */
+  inline int aembEnableException() 
+  { 
+    int msr;
+    asm volatile ("msrset %0, %1":"=r"(msr):"K"(AEMB_MSR_EE));
+    return msr;
+  }
+
+  /** Disable global exception */
+  inline int aembDisableException() 
+  { 
+    int msr;
+    asm volatile ("msrclr %0, %1":"=r"(msr):"K"(AEMB_MSR_EE));
+    return msr;
+  }
+
   /** Enable data caches */
   inline int aembEnableDataTag() 
   { 
@@ -151,31 +169,3 @@ extern "C" {
 #endif
 
 #endif
-
-/*
-  $Log: not supported by cvs2svn $
-  Revision 1.8  2008/04/27 16:33:42  sybreon
-  License change to GPL3.
-
-  Revision 1.7  2008/04/26 19:31:35  sybreon
-  Made headers C compatible.
-
-  Revision 1.6  2008/04/26 18:05:22  sybreon
-  Minor cosmetic changes.
-
-  Revision 1.5  2008/04/20 16:35:53  sybreon
-  Added C/C++ compatible #ifdef statements
-
-  Revision 1.4  2008/04/11 15:53:03  sybreon
-  changed MSR bits
-
-  Revision 1.3  2008/04/11 12:24:12  sybreon
-  added cache controls
-
-  Revision 1.2  2008/04/11 11:48:37  sybreon
-  added interrupt controls (may need to be factorised out)
-
-  Revision 1.1  2008/04/09 19:48:37  sybreon
-  Added new C++ files
-
-*/
