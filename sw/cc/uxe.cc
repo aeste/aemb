@@ -24,7 +24,10 @@
 
 */
 
-#define KERNEL_BASE 0x00020000 ///< Base address of the kernel
+#define BOOT_BASE 0x00020000 ///< Base address of the kernel
+
+#define SRAM_BASE 0x00001000 ///< Base address of RAM block
+#define SRAM_SIZE 0x00010000 ///< Size of RAM block
 
 #include "aemb/core.hh"
 
@@ -58,21 +61,19 @@ int main ()
   uxe_puts("Micro Execution Environment 11.07");
   uxe_puts("Copyright (C) 2011 Aeste Works (M) S/B.");
   //uxe_puts("\nThis program comes with ABSOLUTELY NO WARRANTY;\nThis is free software, and you are welcome to redistribute it under certain conditions;\nFor more details, see the GPL3.txt file included.\n");
-
-  // Enable stdin/out
-
+  
   // Load kernel image (SD/MMC)
-
+  
   // Print kernel base address (only works with 0-9)
-  uxe_putw("Booting 0x");
-  for (unsigned int i = 0, a = KERNEL_BASE; i < 8; ++i, a = a << 4) {
-      uxe_putc( (a >> 28) + 0x30 );
+  uxe_putw("Boot @");
+  for (unsigned int i = 0, k = BOOT_BASE; i < 8; ++i, k <<= 4) {
+    uxe_putc( (k >> 28) + 0x30 );
   }
   uxe_putc('\n');
-
-  // Jump to kernel execution
-  ((boot_addr*) KERNEL_BASE)();
-
+  
+  // Jump to next stage
+  ((boot_addr*) BOOT_BASE)();
+  
   // This should *NEVER* execute.
   return -1;
 }

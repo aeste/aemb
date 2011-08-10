@@ -4,7 +4,7 @@
 
 CC = mb-g++
 LFLAGS = -Wl,-defsym -Wl,_STACK_SIZE=0x2000 -Wl,-defsym -Wl,_HEAP_SIZE=0x2000
-CFLAGS = -mtune=v5.00 -mxl-soft-div -msoft-float -mxl-barrel-shift -mno-xl-soft-mul
+CFLAGS = -mtune=v5.00 -mxl-soft-div -msoft-float -mxl-barrel-shift -mno-xl-soft-mul -g
 IFLAGS = -I cc/
 OFLAGS = -Os
 
@@ -12,10 +12,10 @@ OBJDUMP = mb-objdump
 OBJCOPY = mb-objcopy
 
 testbench: testbench.cc sim
-	echo "DONE"
+	@echo "DONE"
 
 uxe: uxe.cc sim
-	echo "DONE"
+	@echo "DONE"
 
 testbench.cc: cc/testbench.cc
 	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) $(OFLAGS) -specs=aemb.specs -o rom.elf cc/testbench.cc
