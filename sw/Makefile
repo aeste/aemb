@@ -8,6 +8,9 @@ CFLAGS = -mtune=v5.00 -mxl-soft-div -msoft-float -mxl-barrel-shift -mno-xl-soft-
 IFLAGS = -I cc/
 OFLAGS = -Os
 
+# Disable CRT files. Useful for replacing with custom CRT.
+MFLAGS = -nostartfiles
+
 OBJDUMP = mb-objdump
 OBJCOPY = mb-objcopy
 
