@@ -19,7 +19,7 @@ edk63.v:
 
 vvp:
 	@iverilog -Wall -o $(TMP).vvp $(TMP).v
-	time -p vvp -l $(LOG) $(TMP).vvp +randseed=$(RND) +dumpfile=$(VCD)
+	@time -p vvp -l $(LOG) $(TMP).vvp +randseed=$(RND) +dumpfile=$(VCD)
 
 clean:
 	@rm -rf $(TMP)*
