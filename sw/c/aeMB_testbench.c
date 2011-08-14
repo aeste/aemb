@@ -272,7 +272,7 @@ int fsl_test ()
 
 int malloc_test()
 {
-  int *alloc;
+  void *alloc;
   int *mpi = (int*)0xFFFFFFFF;
   alloc = malloc(8 * sizeof(int)); // allocate 32 byte
   *mpi = _REENT->_errno; // for debugging purpose

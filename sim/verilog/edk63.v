@@ -101,8 +101,8 @@ module edk63();
 
    // FAKE MEMORY ////////////////////////////////////////////////////////
 
-   reg [31:0] 		rom[0:65535];
-   reg [31:0] 		ram[0:65535];
+   reg [31:0] 		rom[0:(1<<20)-1];
+   reg [31:0] 		ram[0:(1<<20)-1];
    reg [31:0] 		dwblat;
    reg [31:0] 		xwblat;   
    reg [31:2] 		dadr, iadr;
@@ -163,7 +163,7 @@ module edk63();
       else begin
 	 // FAUX timer implementation - triggers every 32k counts (e.g. 1s on RTC)
 	 timer0 <= timer0 + 1;
-	 if (timer0 % 32768 == 0) sys_int_i <= 1'b1;     
+	 if (timer0 % (1<<15) == 0) sys_int_i <= 1'b1;     
 
       end
       
@@ -186,7 +186,7 @@ module edk63();
    
    integer i;   
    initial begin
-      for (i=0;i<65535;i=i+1) begin
+      for (i=0;i<(1<<20)-1;i=i+1) begin
 	 ram[i] <= $random;
       end
       #1 $readmemh("dump.vmem",rom);
