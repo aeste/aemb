@@ -19,8 +19,6 @@
 ** License along with AEMB. If not, see <http://www.gnu.org/licenses/>.
 */
 
-`include "random.v"
-  
 module edk32 ();
 
    // INITIAL SETUP //////////////////////////////////////////////////////
@@ -33,16 +31,23 @@ module edk32 ();
    
    always #5 sys_clk_i = ~sys_clk_i;   
 
+   integer   randseed;
+   reg [31:0] timer0; 
+   
    initial begin
-      `ifdef VCD_DUMP
+        // Initialise Random to command-line parameter.
+      if (!$value$plusargs("randseed=%d",  randseed)) randseed=42;
+      timer0 = $random(randseed);
+      
+`ifdef DUMP_VCD
       $dumpfile("dump.vcd");
       $dumpvars(1,dut);
-      `endif
+`endif
       
       //seed = `randseed;
       theend = 0;      
       svc = 0;      
-      sys_clk_i = $random(`randseed);
+      sys_clk_i = $random;
       sys_rst_i = 1;
       sys_int_i = 0;
       sys_exc_i = 0;      
@@ -62,11 +67,11 @@ module edk32 ();
    wire [15:2] iwb_adr_o;
    wire        iwb_stb_o;
    wire        dwb_stb_o;
-   reg [31:0]  rom [0:65535];
+   reg [31:0]  rom [0:(1<<20)-1];
    wire [31:0] iwb_dat_i;
    reg 	       iwb_ack_i, dwb_ack_i, fsl_ack_i;
 
-   reg [31:0]  ram[0:65535];
+   reg [31:0]  ram[0:(1<<20)-1];
    wire [31:0] dwb_dat_i;
    reg [31:0]  dwblat;
    wire        dwb_we_o;
@@ -136,7 +141,7 @@ module edk32 ();
 	fsl_ack_i <= #1 fsl_stb_o;
      end // else: !if(sys_rst_i)
    
-   always @(negedge sys_clk_i) begin
+always @(negedge sys_clk_i) begin
       iadr <= #1 iwb_adr_o;      
       dadr <= #1 dwb_adr_o;
       
@@ -152,13 +157,25 @@ module edk32 ();
 	 endcase // case (dwb_sel_o)
       end // if (dwb_we_o & dwb_stb_o)
    end // always @ (negedge sys_clk_i)
+
+always @(posedge sys_clk_i) begin
+      // SPECIAL PORTS
+   if (dwb_we_o & dwb_stb_o & dwb_ack_i) begin
+      case ({dwb_adr_o,2'o0})
+	32'hFFFFFFD0: $displayh(dwb_dat_o); // display data
+	32'hFFFFFFC0: $write("%c",dwb_dat_o[31:24]); // stdout output
+	32'hFFFFFFE0: sys_int_i <= #1 !sys_int_i; // acknowledge interrupt.
+	32'hFFFFFFF0: timer0 <= dwb_dat_o; // write to Timer0	   
+      endcase // case ({dwb_adr_o,2'o0})      
+   end
+end
    
 `endif // !`ifdef POSEDGE
    
 
    integer i;   
    initial begin
-      for (i=0;i<65535;i=i+1) begin
+      for (i=0;i<(1<<20)-1;i=i+1) begin
 	 ram[i] <= $random;
       end
       #1 $readmemh("dump.vmem",ram);
