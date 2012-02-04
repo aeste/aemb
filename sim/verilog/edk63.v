@@ -57,12 +57,12 @@ module edk63();
       // Initialise Random to command-line parameter.
       if (!$value$plusargs("randseed=%d",  randseed)) randseed=42;
       timer0 = $random(randseed);
-      
-`ifdef DUMP_VCD
-      $dumpfile ("dump.vcd");
-      $dumpvars (1,uut);           
-`endif
-      
+
+      if ($value$plusargs("dumpfile=%s",  randseed)) begin
+	 $dumpfile ("dump.vcd");
+	 $dumpvars (1,uut,uut.pip0,uut.ctrl0);
+      end
+     
       sys_clk_i = $random;
       sys_rst_i = 1;
       sys_ena_i = 1;
@@ -163,7 +163,7 @@ module edk63();
       else begin
 	 // FAUX timer implementation - triggers every 32k counts (e.g. 1s on RTC)
 	 timer0 <= timer0 + 1;
-	 if (timer0 % (1<<15) == 0) sys_int_i <= 1'b1;     
+	 if (timer0 % (1<<10) == 0) sys_int_i <= 1'b1;     
 
       end
       
