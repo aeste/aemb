@@ -1,4 +1,8 @@
-AEMB 32-bit Microprocessor Core.
-===============================
+Multi-threaded 32-bit Microprocessor Core
+=========================================
 
-Smallest and fastest processor it its class!
+REVISION HISTORY
+
+*R12.02 - Last development update for AEMB2. All development will
+ shift to the next-gen core.
+
