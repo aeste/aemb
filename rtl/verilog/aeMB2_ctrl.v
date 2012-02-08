@@ -199,10 +199,24 @@ module aeMB2_ctrl (/*AUTOARG*/
 	rIMM0 <= #1 wIMM;	
      end
 
-   assign fINT = brk_if[0] & gpha & !rFIM1;   
+   wire       fBRKI = (opc_of == 6'o56) & (ra_of[4:0] == 5'hD);
+   reg [2:0]  rINT;
+ 	      
+   assign fINT = brk_if[0] & (gpha ^ rINT[2]) & !rFIM1;   
    //assign fXCE = brk_if[1];
    assign fXCE = |{exc_ill, exc_iwb, exc_dwb};
    // & ((gpha & !rFIM1) | (!gpha & rFIM0));   
+
+   // Distribute interrupts over the phases.
+   always @(posedge gclk)
+     if (grst) begin
+	/*AUTORESET*/
+	// Beginning of autoreset for uninitialized flops
+	rINT <= 3'h0;
+	// End of automatics
+     end else if (dena) begin
+	rINT <= #1 {rINT[1:0],rINT[0] ^ fBRKI};	
+     end
    
    // operand latch   
    reg 			wrb_ex;

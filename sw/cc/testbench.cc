@@ -91,8 +91,8 @@ int main()
   puts("AEMB2 32-bit Microprocessor Core Tests");
   //iprintf("Timer0\t: %d\n",getTimer0());
   
-  numtests();
   coretests();
+  numtests();
 
   return EXIT_SUCCESS;
 }
