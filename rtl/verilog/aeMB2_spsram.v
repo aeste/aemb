@@ -48,23 +48,22 @@ module aeMB2_spsram (/*AUTOARG*/
 		   clk_i;
    
    /*AUTOREG*/
-   // Beginning of automatic regs (for this module's undeclared outputs)
-   reg [DW-1:0]		dat_o;
-   // End of automatics
    reg [DW:1] 	   rRAM [(1<<AW)-1:0];
    reg [AW:1] 	   rADR;
    
    always @(posedge clk_i)
-     if (wre_i) rRAM[adr_i] <= #1 dat_i;
+     if (ena_i & wre_i) 
+       rRAM[adr_i] <= #1 dat_i;
 
+   assign dat_o = rRAM[rADR];   
    always @(posedge clk_i)
      if (rst_i)
        /*AUTORESET*/
        // Beginning of autoreset for uninitialized flops
-       dat_o <= {(1+(DW-1)){1'b0}};
+       rADR <= {(1+(AW)-(1)){1'b0}};
        // End of automatics
      else if (ena_i) 
-       dat_o <= #1 rRAM[adr_i];	
+       rADR <= #1 adr_i;	
 
    // --- SIMULATION ONLY ------------------------------------
    // synopsys translate_off

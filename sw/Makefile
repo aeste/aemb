@@ -3,7 +3,7 @@
 # 
 
 CC = mb-g++
-LFLAGS = -Wl,-defsym -Wl,_STACK_SIZE=0x2000 -Wl,-defsym -Wl,_HEAP_SIZE=0x2000
+LFLAGS = -Wl,-defsym -Wl,_STACK_SIZE=0x400 -Wl,-defsym -Wl,_HEAP_SIZE=0x1000
 CFLAGS = -mtune=v5.00 -mxl-soft-div -msoft-float -mxl-barrel-shift -mno-xl-soft-mul -g
 IFLAGS = -I cc/
 OFLAGS = -Os
@@ -25,6 +25,9 @@ testbench.cc: cc/testbench.cc
 
 uxe.cc: cc/uxe.cc 
 	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) $(OFLAGS) -specs=aemb.specs -o rom.elf cc/uxe.cc
+
+testsoc.cc: cc/testsoc.cc 
+	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) $(OFLAGS) -specs=aemb.specs -o rom.elf cc/testsoc.cc
 
 sim: 
 	$(OBJDUMP) -DSCz rom.elf > rom.dump
