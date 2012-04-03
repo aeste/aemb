@@ -1,0 +1,23 @@
+/*****************************************************
+*
+* FILE : aembsoc.bmm
+*
+* Define a BRAM map for the RAM controller memory space. The
+* address space 0x0000 - 0x3FFF, 4k x 32.cd .
+*
+*****************************************************/
+
+ADDRESS_SPACE uram0 RAMB16 [0x0000:0x3FFF]
+	// Bus access map for the lower 8k, CPU address 0x0000 - 0x1FFF
+	BUS_BLOCK
+	      	uram0/dp0/Mram_rRAM1 [3:0] LOC = X0Y2;
+	      	uram0/dp0/Mram_rRAM2 [7:4] LOC = X0Y3;
+	      	uram0/dp1/Mram_rRAM1 [11:8] LOC = X0Y5;
+	      	uram0/dp1/Mram_rRAM2 [15:12] LOC = X1Y3;
+	      	uram0/dp2/Mram_rRAM1 [19:16] LOC = X1Y4;
+	      	uram0/dp2/Mram_rRAM2 [23:20] LOC = X1Y5;
+	      	uram0/dp3/Mram_rRAM1 [27:24] LOC = X0Y7;
+	      	uram0/dp3/Mram_rRAM2 [31:28] LOC = X0Y6;
+	END_BUS_BLOCK;
+
+END_ADDRESS_BLOCK;
