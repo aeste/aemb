@@ -8,9 +8,8 @@
 
 module aeMB2_arb(/*AUTOARG*/
    // Outputs
-   gpio_dat, gpio_ack, mwb_adr_o, mwb_dat_o, mwb_sel_o, mwb_stb_o,
-   mwb_wre_o, mwb_cyc_o, mwb_tag_o, dwb_dat_i, dwb_ack_i, xwb_dat_i,
-   xwb_ack_i,
+   mwb_adr_o, mwb_dat_o, mwb_sel_o, mwb_stb_o, mwb_wre_o, mwb_cyc_o,
+   mwb_tag_o, dwb_dat_i, dwb_ack_i, xwb_dat_i, xwb_ack_i,
    // Inouts
    gpio,
    // Inputs
@@ -59,10 +58,10 @@ module aeMB2_arb(/*AUTOARG*/
 
    inout [7:0] 		 gpio;
 
-   /*AUTOOUTPUT*/
+   //*AUTOOUTPUT*/
    // Beginning of automatic outputs (from unused autoinst outputs)
-   output		gpio_ack;		// From gpio0 of vpio_gpio.v
-   output [7:0]		gpio_dat;		// From gpio0 of vpio_gpio.v
+   //output		gpio_ack;		// From gpio0 of vpio_gpio.v
+   //output [7:0]		gpio_dat;		// From gpio0 of vpio_gpio.v
    // End of automatics
    /*AUTOINPUT*/
    /*AUTOWIRE*/
@@ -85,7 +84,7 @@ module aeMB2_arb(/*AUTOARG*/
 
    wire  		sel = dwb_adr_o[30];
    wire [7:0] 		gpio_dat;
-   wire 			gpio_ack;      
+   wire 		gpio_ack;      
    
    always @(/*AUTOSENSE*/dwb_adr_o or dwb_cyc_o or dwb_dat_o
 	    or dwb_sel_o or dwb_stb_o or dwb_tag_o or dwb_wre_o
