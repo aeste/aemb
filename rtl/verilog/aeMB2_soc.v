@@ -10,7 +10,7 @@
 
 module aeMB2_soc(/*AUTOARG*/
    // Outputs
-   gpio_dat, gpio_ack,
+   leds,
    // Inouts
    gpio,
    // Inputs
@@ -29,15 +29,9 @@ module aeMB2_soc(/*AUTOARG*/
    parameter AEMB_ICH = 11;
    parameter AEMB_IDX = 6;   
 
-   
    /*AUTOOUTPUT*/
-   // Beginning of automatic outputs (from unused autoinst outputs)
-   output		gpio_ack;		// From arb0 of aeMB2_arb.v
-   output [7:0]		gpio_dat;		// From arb0 of aeMB2_arb.v
-   // End of automatics
    /*AUTOINPUT*/
    // Beginning of automatic inputs (from unused autoinst inputs)
-   input		sys_clk_i;		// To arb0 of aeMB2_arb.v, ...
    input		sys_ena_i;		// To cpu0 of aeMB2_edk63.v
    input		sys_int_i;		// To cpu0 of aeMB2_edk63.v
    input		sys_rst_i;		// To arb0 of aeMB2_arb.v, ...
@@ -53,18 +47,18 @@ module aeMB2_soc(/*AUTOARG*/
    wire			dwb_stb_o;		// From cpu0 of aeMB2_edk63.v
    wire			dwb_tag_o;		// From cpu0 of aeMB2_edk63.v
    wire			dwb_wre_o;		// From cpu0 of aeMB2_edk63.v
-   wire			iwb_ack_i;		// From dram0 of aeMB2_uram.v
+   wire			iwb_ack_i;		// From uram0 of aeMB2_uram.v
    wire [AEMB_IWB-1:2]	iwb_adr_o;		// From cpu0 of aeMB2_edk63.v
    wire			iwb_cyc_o;		// From cpu0 of aeMB2_edk63.v
-   wire [31:0]		iwb_dat_i;		// From dram0 of aeMB2_uram.v
+   wire [31:0]		iwb_dat_i;		// From uram0 of aeMB2_uram.v
    wire [3:0]		iwb_sel_o;		// From cpu0 of aeMB2_edk63.v
    wire			iwb_stb_o;		// From cpu0 of aeMB2_edk63.v
    wire			iwb_tag_o;		// From cpu0 of aeMB2_edk63.v
    wire			iwb_wre_o;		// From cpu0 of aeMB2_edk63.v
-   wire			mwb_ack_i;		// From dram0 of aeMB2_uram.v
+   wire			mwb_ack_i;		// From uram0 of aeMB2_uram.v
    wire [AEMB_DWB-1:2]	mwb_adr_o;		// From arb0 of aeMB2_arb.v
    wire			mwb_cyc_o;		// From arb0 of aeMB2_arb.v
-   wire [31:0]		mwb_dat_i;		// From dram0 of aeMB2_uram.v
+   wire [31:0]		mwb_dat_i;		// From uram0 of aeMB2_uram.v
    wire [31:0]		mwb_dat_o;		// From arb0 of aeMB2_arb.v
    wire [3:0]		mwb_sel_o;		// From arb0 of aeMB2_arb.v
    wire			mwb_stb_o;		// From arb0 of aeMB2_arb.v
@@ -82,7 +76,33 @@ module aeMB2_soc(/*AUTOARG*/
    // End of automatics
    /*AUTOREG*/
    inout [7:0] 		gpio;
+
+
+   output [7:0] 	leds;
+   assign leds = iwb_adr_o;   
+
+   wire 		sys_clk;
+   input 		sys_clk_i;
    
+   reg [25:0] 		div;
+   assign sys_clk = div[25];
+   
+   always @(posedge sys_clk_i)
+     if (sys_rst_i)
+       /*AUTORESET*/
+       // Beginning of autoreset for uninitialized flops
+       div <= 26'h0;
+       // End of automatics
+     else
+       div <= div + 1;
+
+   /*aeMB2_arb AUTO_TEMPLATE (
+    .sys_clk_i(sys_clk),
+    ); */
+
+   /*aeMB2_edk63 AUTO_TEMPLATE (
+    .sys_clk_i(sys_clk),
+    ); */
    
    aeMB2_arb #(/*AUTOINSTPARAM*/
 	       // Parameters
@@ -102,8 +122,6 @@ module aeMB2_soc(/*AUTOARG*/
       .dwb_ack_i			(dwb_ack_i),
       .xwb_dat_i			(xwb_dat_i[31:0]),
       .xwb_ack_i			(xwb_ack_i),
-      .gpio_ack				(gpio_ack),
-      .gpio_dat				(gpio_dat[7:0]),
       // Inouts
       .gpio				(gpio[7:0]),
       // Inputs
@@ -123,7 +141,7 @@ module aeMB2_soc(/*AUTOARG*/
       .xwb_wre_o			(xwb_wre_o),
       .xwb_cyc_o			(xwb_cyc_o),
       .xwb_tag_o			(xwb_tag_o),
-      .sys_clk_i			(sys_clk_i),
+      .sys_clk_i			(sys_clk),		 // Templated
       .sys_rst_i			(sys_rst_i));   
 
 
@@ -132,12 +150,13 @@ module aeMB2_soc(/*AUTOARG*/
     .AW(14),
     .mwb_adr_o (mwb_adr_o[13:2]),
     .iwb_adr_o (iwb_adr_o[13:2]),
+    .sys_clk_i(sys_clk),
     ); */
    
    aeMB2_uram #(/*AUTOINSTPARAM*/
 		// Parameters
 		.AW			(14))			 // Templated
-   dram0
+   uram0
      (/*AUTOINST*/
       // Outputs
       .iwb_dat_i			(iwb_dat_i[31:0]),
@@ -151,7 +170,7 @@ module aeMB2_soc(/*AUTOARG*/
       .mwb_adr_o			(mwb_adr_o[13:2]),	 // Templated
       .mwb_dat_o			(mwb_dat_o[31:0]),
       .mwb_wre_o			(mwb_wre_o),
-      .sys_clk_i			(sys_clk_i),
+      .sys_clk_i			(sys_clk),		 // Templated
       .mwb_stb_o			(mwb_stb_o),
       .mwb_sel_o			(mwb_sel_o[3:0]),
       .iwb_sel_o			(iwb_sel_o[3:0]),
@@ -200,7 +219,7 @@ module aeMB2_soc(/*AUTOARG*/
 	 .dwb_dat_i			(dwb_dat_i[31:0]),
 	 .iwb_ack_i			(iwb_ack_i),
 	 .iwb_dat_i			(iwb_dat_i[31:0]),
-	 .sys_clk_i			(sys_clk_i),
+	 .sys_clk_i			(sys_clk),		 // Templated
 	 .sys_ena_i			(sys_ena_i),
 	 .sys_int_i			(sys_int_i),
 	 .sys_rst_i			(sys_rst_i),

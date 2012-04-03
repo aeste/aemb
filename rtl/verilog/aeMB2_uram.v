@@ -11,21 +11,21 @@ module aeMB2_uram(/*AUTOARG*/
    
    /*AUTOOUTPUT*/
    // Beginning of automatic outputs (from unused autoinst outputs)
-   output [31:0]	iwb_dat_i;		// From ram0 of aeMB2_dpsram.v, ...
-   output [31:0]	mwb_dat_i;		// From ram0 of aeMB2_dpsram.v, ...
+   output [31:0]	iwb_dat_i;		// From dp0 of aeMB2_dpsram.v, ...
+   output [31:0]	mwb_dat_i;		// From dp0 of aeMB2_dpsram.v, ...
    // End of automatics
    output 		mwb_ack_i;
    output 		iwb_ack_i;
    
    /*AUTOINPUT*/
    // Beginning of automatic inputs (from unused autoinst inputs)
-   input [AW-1:2]	iwb_adr_o;		// To ram0 of aeMB2_dpsram.v, ...
-   input		iwb_stb_o;		// To ram0 of aeMB2_dpsram.v, ...
-   input		iwb_wre_o;		// To ram0 of aeMB2_dpsram.v, ...
-   input [AW-1:2]	mwb_adr_o;		// To ram0 of aeMB2_dpsram.v, ...
-   input [31:0]		mwb_dat_o;		// To ram0 of aeMB2_dpsram.v, ...
-   input		mwb_wre_o;		// To ram0 of aeMB2_dpsram.v, ...
-   input		sys_clk_i;		// To ram0 of aeMB2_dpsram.v, ...
+   input [AW-1:2]	iwb_adr_o;		// To dp0 of aeMB2_dpsram.v, ...
+   input		iwb_stb_o;		// To dp0 of aeMB2_dpsram.v, ...
+   input		iwb_wre_o;		// To dp0 of aeMB2_dpsram.v, ...
+   input [AW-1:2]	mwb_adr_o;		// To dp0 of aeMB2_dpsram.v, ...
+   input [31:0]		mwb_dat_o;		// To dp0 of aeMB2_dpsram.v, ...
+   input		mwb_wre_o;		// To dp0 of aeMB2_dpsram.v, ...
+   input		sys_clk_i;		// To dp0 of aeMB2_dpsram.v, ...
    // End of automatics
 
    input 		mwb_stb_o;   
@@ -94,77 +94,77 @@ module aeMB2_uram(/*AUTOARG*/
 		  // Parameters
 		  .AW			(AW-2),			 // Templated
 		  .DW			(8))			 // Templated
-   ram0 (/*AUTOINST*/
-	 // Outputs
-	 .dat_o				(mwb_dat_i[7:0]),	 // Templated
-	 .xdat_o			(iwb_dat_i[7:0]),	 // Templated
-	 // Inputs
-	 .adr_i				(mwb_adr_o[AW-1:2]),	 // Templated
-	 .dat_i				(mwb_dat_o[7:0]),	 // Templated
-	 .wre_i				(mwb_wre_o),		 // Templated
-	 .ena_i				(dwb_sel[0]),		 // Templated
-	 .xadr_i			(iwb_adr_o[AW-1:2]),	 // Templated
-	 .xdat_i			(32'hX),		 // Templated
-	 .xwre_i			(iwb_wre_o),		 // Templated
-	 .xena_i			(iwb_stb_o),		 // Templated
-	 .clk_i				(sys_clk_i));		 // Templated
+   dp0 (/*AUTOINST*/
+	// Outputs
+	.dat_o				(mwb_dat_i[7:0]),	 // Templated
+	.xdat_o				(iwb_dat_i[7:0]),	 // Templated
+	// Inputs
+	.adr_i				(mwb_adr_o[AW-1:2]),	 // Templated
+	.dat_i				(mwb_dat_o[7:0]),	 // Templated
+	.wre_i				(mwb_wre_o),		 // Templated
+	.ena_i				(dwb_sel[0]),		 // Templated
+	.xadr_i				(iwb_adr_o[AW-1:2]),	 // Templated
+	.xdat_i				(32'hX),		 // Templated
+	.xwre_i				(iwb_wre_o),		 // Templated
+	.xena_i				(iwb_stb_o),		 // Templated
+	.clk_i				(sys_clk_i));		 // Templated
 
    aeMB2_dpsram #(/*AUTOINSTPARAM*/
 		  // Parameters
 		  .AW			(AW-2),			 // Templated
 		  .DW			(8))			 // Templated
-   ram1 (/*AUTOINST*/
-	 // Outputs
-	 .dat_o				(mwb_dat_i[15:8]),	 // Templated
-	 .xdat_o			(iwb_dat_i[15:8]),	 // Templated
-	 // Inputs
-	 .adr_i				(mwb_adr_o[AW-1:2]),	 // Templated
-	 .dat_i				(mwb_dat_o[15:8]),	 // Templated
-	 .wre_i				(mwb_wre_o),		 // Templated
-	 .ena_i				(dwb_sel[1]),		 // Templated
-	 .xadr_i			(iwb_adr_o[AW-1:2]),	 // Templated
-	 .xdat_i			(32'hX),		 // Templated
-	 .xwre_i			(iwb_wre_o),		 // Templated
-	 .xena_i			(iwb_stb_o),		 // Templated
-	 .clk_i				(sys_clk_i));		 // Templated
+   dp1 (/*AUTOINST*/
+	// Outputs
+	.dat_o				(mwb_dat_i[15:8]),	 // Templated
+	.xdat_o				(iwb_dat_i[15:8]),	 // Templated
+	// Inputs
+	.adr_i				(mwb_adr_o[AW-1:2]),	 // Templated
+	.dat_i				(mwb_dat_o[15:8]),	 // Templated
+	.wre_i				(mwb_wre_o),		 // Templated
+	.ena_i				(dwb_sel[1]),		 // Templated
+	.xadr_i				(iwb_adr_o[AW-1:2]),	 // Templated
+	.xdat_i				(32'hX),		 // Templated
+	.xwre_i				(iwb_wre_o),		 // Templated
+	.xena_i				(iwb_stb_o),		 // Templated
+	.clk_i				(sys_clk_i));		 // Templated
    
    aeMB2_dpsram #(/*AUTOINSTPARAM*/
 		  // Parameters
 		  .AW			(AW-2),			 // Templated
 		  .DW			(8))			 // Templated
-   ram2 (/*AUTOINST*/
-	 // Outputs
-	 .dat_o				(mwb_dat_i[23:16]),	 // Templated
-	 .xdat_o			(iwb_dat_i[23:16]),	 // Templated
-	 // Inputs
-	 .adr_i				(mwb_adr_o[AW-1:2]),	 // Templated
-	 .dat_i				(mwb_dat_o[23:16]),	 // Templated
-	 .wre_i				(mwb_wre_o),		 // Templated
-	 .ena_i				(dwb_sel[2]),		 // Templated
-	 .xadr_i			(iwb_adr_o[AW-1:2]),	 // Templated
-	 .xdat_i			(32'hX),		 // Templated
-	 .xwre_i			(iwb_wre_o),		 // Templated
-	 .xena_i			(iwb_stb_o),		 // Templated
-	 .clk_i				(sys_clk_i));		 // Templated
+   dp2 (/*AUTOINST*/
+	// Outputs
+	.dat_o				(mwb_dat_i[23:16]),	 // Templated
+	.xdat_o				(iwb_dat_i[23:16]),	 // Templated
+	// Inputs
+	.adr_i				(mwb_adr_o[AW-1:2]),	 // Templated
+	.dat_i				(mwb_dat_o[23:16]),	 // Templated
+	.wre_i				(mwb_wre_o),		 // Templated
+	.ena_i				(dwb_sel[2]),		 // Templated
+	.xadr_i				(iwb_adr_o[AW-1:2]),	 // Templated
+	.xdat_i				(32'hX),		 // Templated
+	.xwre_i				(iwb_wre_o),		 // Templated
+	.xena_i				(iwb_stb_o),		 // Templated
+	.clk_i				(sys_clk_i));		 // Templated
    
    aeMB2_dpsram #(/*AUTOINSTPARAM*/
 		  // Parameters
 		  .AW			(AW-2),			 // Templated
 		  .DW			(8))			 // Templated
-   ram3 (/*AUTOINST*/
-	 // Outputs
-	 .dat_o				(mwb_dat_i[31:24]),	 // Templated
-	 .xdat_o			(iwb_dat_i[31:24]),	 // Templated
-	 // Inputs
-	 .adr_i				(mwb_adr_o[AW-1:2]),	 // Templated
-	 .dat_i				(mwb_dat_o[31:24]),	 // Templated
-	 .wre_i				(mwb_wre_o),		 // Templated
-	 .ena_i				(dwb_sel[3]),		 // Templated
-	 .xadr_i			(iwb_adr_o[AW-1:2]),	 // Templated
-	 .xdat_i			(32'hX),		 // Templated
-	 .xwre_i			(iwb_wre_o),		 // Templated
-	 .xena_i			(iwb_stb_o),		 // Templated
-	 .clk_i				(sys_clk_i));		 // Templated
+   dp3 (/*AUTOINST*/
+	// Outputs
+	.dat_o				(mwb_dat_i[31:24]),	 // Templated
+	.xdat_o				(iwb_dat_i[31:24]),	 // Templated
+	// Inputs
+	.adr_i				(mwb_adr_o[AW-1:2]),	 // Templated
+	.dat_i				(mwb_dat_o[31:24]),	 // Templated
+	.wre_i				(mwb_wre_o),		 // Templated
+	.ena_i				(dwb_sel[3]),		 // Templated
+	.xadr_i				(iwb_adr_o[AW-1:2]),	 // Templated
+	.xdat_i				(32'hX),		 // Templated
+	.xwre_i				(iwb_wre_o),		 // Templated
+	.xena_i				(iwb_stb_o),		 // Templated
+	.clk_i				(sys_clk_i));		 // Templated
    
    
 endmodule // aeMB2_ram
